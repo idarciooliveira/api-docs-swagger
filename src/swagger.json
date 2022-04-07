@@ -1,0 +1,118 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "API for E-commerce Localhost",
+        "description": "Endpoits to connect to Localhost Services",
+        "termsOfService": "http://localhost:3333/termsofservices",
+        "contact": {
+            "email": "support@localhost.com"
+        },
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "http://localhost:3333/tests/v1"
+        },
+        {
+            "url": "http://localhost:3333/v1"
+        }
+    ],
+    "paths": {
+        "/products": {
+            "post": {
+                "summary": "Create Product",
+                "description": "EndPoint to create a Product",
+                "tags": ["Products"],
+                "security": [{
+                    "bearerAuth": []
+                }],
+                "requestBody":{
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                               "$ref": "#/components/schemas/Product"
+                            },
+                            "examples": {
+                                "product": {
+                                    "value": {
+                                        "description": "iPhone 5s 16GB",
+                                        "price": 6500
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "400": {
+                        "description": "Faild on create a Product"
+                    },
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "type": "object",
+                                "schema": {
+                                   "$ref": "#/components/schemas/Product"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/products/:id": {
+            "get": {
+                "summary": "Find Product by Id",
+                "description": "find a single product by his Id",
+                "tags": ["Products"],
+                "parameters": [
+                    {
+                        "id": "id",
+                        "in": "query",
+                        "description": "Product Id",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "type": "object",
+                                "schema": {
+                                   "$ref": "#/components/schemas/Product"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "Product": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "string"
+                    },
+                    "description": {
+                        "type": "string"
+                    },
+                    "price": {
+                        "type": "number"
+                    }
+                }
+            }
+        },
+        "securitySchemes": {
+            "bearerAuth":{
+                "type": "http",
+                "scheme": "bearer",
+                "bearerFormat": "JWT"
+            }
+        }
+    }
+}
