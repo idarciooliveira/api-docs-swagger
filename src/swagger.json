@@ -11,10 +11,10 @@
     },
     "servers": [
         {
-            "url": "http://localhost:3333/tests/v1"
+            "url": "http://localhost:3333/v1"
         },
         {
-            "url": "http://localhost:3333/v1"
+            "url": "http://localhost:3333/v2"
         }
     ],
     "paths": {
@@ -44,6 +44,9 @@
                     }
                 },
                 "responses": {
+                    "401": {
+                        "description": "Unathorazed"
+                    },
                     "400": {
                         "description": "Faild on create a Product"
                     },
@@ -59,22 +62,55 @@
                         }
                     }
                 }
+            },     
+            "get": {
+                "summary": "Find All Products",
+                "description": "Find All Products",
+                "tags": ["Products"],
+                "security": [{
+                    "bearerAuth": []
+                }],
+                "responses": {
+                    "401": {
+                        "description": "UNATHORIZAED"
+                    },
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "type": "array",
+                                "schema": {
+                                   "$ref": "#/components/schemas/Product"
+                                }
+                            }
+                        }
+                    }
+                }
             }
         },
-        "/products/:id": {
+        "/products/{id}": {
             "get": {
                 "summary": "Find Product by Id",
                 "description": "find a single product by his Id",
                 "tags": ["Products"],
+                "security": [{
+                    "bearerAuth": []
+                }],
                 "parameters": [
                     {
-                        "id": "id",
-                        "in": "query",
-                        "description": "Product Id",
+                        "name": "id",
+                        "in": "path",
+                        "description": "Product by Id",
                         "required": true
                     }
                 ],
                 "responses": {
+                    "401": {
+                        "description": "Unathorazed"
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    },
                     "200": {
                         "description": "OK",
                         "content": {
@@ -85,6 +121,85 @@
                                 }
                             }
                         }
+                    }
+                }
+            },
+            "put": {
+                "summary": "Update Product by Id",
+                "description": "Update single product by his Id",
+                "tags": ["Products"],
+                "security": [{
+                    "bearerAuth": []
+                }],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Product Id",
+                        "required": true
+                    }
+                ],
+                "requestBody":{
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                               "$ref": "#/components/schemas/Product"
+                            },
+                            "examples": {
+                                "product": {
+                                    "value": {
+                                        "description": "iPhone 5s 16GB",
+                                        "price": 12500
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "401": {
+                        "description": "Unathorazed"
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    },
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "type": "object",
+                                "schema": {
+                                   "$ref": "#/components/schemas/Product"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "summary": "Remove Product by Id",
+                "description": "Remove single product by his Id",
+                "tags": ["Products"],
+                "security": [{
+                    "bearerAuth": []
+                }],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Product Id",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "401": {
+                        "description": "Unathorazed"
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    },
+                    "200": {
+                        "description": "OK"
                     }
                 }
             }
